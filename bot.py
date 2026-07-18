@@ -16,7 +16,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
-    await database.init_db()
     # Загружаем список URL иконок персонажей/оружия через Ambr API.
     # Если API недоступен — бот молча откатится на процедурные портреты.
     asyncio.create_task(icons.preload())
@@ -29,12 +28,14 @@ async def on_ready():
 
 
 async def main():
+    await database.init_db()
     async with bot:
         await bot.load_extension("cogs.gacha_cog")
         try:
             await bot.start(config.DISCORD_TOKEN)
         finally:
             await icons.close()
+            await database.close()
 
 
 if __name__ == "__main__":
