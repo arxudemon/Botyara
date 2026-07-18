@@ -1,3 +1,4 @@
+import asyncio
 import math
 
 import discord
@@ -17,6 +18,13 @@ _BANNER_CHOICES = [
 ]
 
 _INVENTORY_PAGE_SIZE = 10
+
+# Рендер Pillow — синхронный и CPU-bound, поэтому уезжает в отдельный поток:
+# иначе он блокирует event loop целиком, и Discord успевает протухнуть
+# интеракции другого юзера до defer() (ошибка 10062 Unknown interaction).
+# Семафор держит рендеры по одному: параллелить их смысла нет (loop и так
+# свободен), а animator._font_cache шарит объекты шрифтов между потоками.
+_RENDER_SEMAPHORE = asyncio.Semaphore(1)
 
 
 def _item_kind(item: dict) -> str:
@@ -60,7 +68,8 @@ class InventoryView(discord.ui.View):
             info = await _attach_icon(info)
             results.append({"item": info, "rarity": entry["rarity"]})
 
-        png_buffer = generate_grid_static(results)
+        async with _RENDER_SEMAPHORE:
+            png_buffer = await asyncio.to_thread(generate_grid_static, results)
         return discord.File(png_buffer, filename="inventory.png")
 
     async def _update_message(self, interaction: discord.Interaction):
@@ -103,16 +112,19 @@ class GachaCog(commands.Cog):
     async def pull(self, interaction: discord.Interaction, banner: app_commands.Choice[str]):
         await interaction.response.defer(thinking=True)
 
-        state = await database.get_state(interaction.user.id)
-
-        result = gacha_system.single_pull(state, pool_type=banner.value)
-        await database.save_state(interaction.user.id, state)
-        await database.add_to_inventory(
-            interaction.user.id, result["item"]["name"], result["rarity"]
-        )
+        async with database.lock_for(interaction.user.id):
+            state = await database.get_state(interaction.user.id)
+            result = gacha_system.single_pull(state, pool_type=banner.value)
+            await database.save_state(interaction.user.id, state)
+            await database.add_to_inventory(
+                interaction.user.id, result["item"]["name"], result["rarity"]
+            )
 
         item_with_icon = await _attach_icon(result["item"])
-        gif_buffer = generate_reveal_gif(item_with_icon, result["rarity"])
+        async with _RENDER_SEMAPHORE:
+            gif_buffer = await asyncio.to_thread(
+                generate_reveal_gif, item_with_icon, result["rarity"]
+            )
         file = discord.File(gif_buffer, filename="pull.gif")
 
         embed = discord.Embed(
@@ -131,12 +143,12 @@ class GachaCog(commands.Cog):
     async def pull10(self, interaction: discord.Interaction, banner: app_commands.Choice[str]):
         await interaction.response.defer(thinking=True)
 
-        state = await database.get_state(interaction.user.id)
-
-        results = gacha_system.ten_pull(state, pool_type=banner.value)
-        await database.save_state(interaction.user.id, state)
-        for r in results:
-            await database.add_to_inventory(interaction.user.id, r["item"]["name"], r["rarity"])
+        async with database.lock_for(interaction.user.id):
+            state = await database.get_state(interaction.user.id)
+            results = gacha_system.ten_pull(state, pool_type=banner.value)
+            await database.save_state(interaction.user.id, state)
+            for r in results:
+                await database.add_to_inventory(interaction.user.id, r["item"]["name"], r["rarity"])
 
         # Подтягиваем реальные иконки для всех 10 результатов параллельно
         items_with_icons = [await _attach_icon(r["item"]) for r in results]
@@ -145,7 +157,10 @@ class GachaCog(commands.Cog):
         ]
 
         best = max(results, key=lambda r: r["rarity"])
-        gif_buffer = generate_multi_reveal_gif(results_with_icons)
+        async with _RENDER_SEMAPHORE:
+            gif_buffer = await asyncio.to_thread(
+                generate_multi_reveal_gif, results_with_icons
+            )
         file = discord.File(gif_buffer, filename="pull10.gif")
 
         embed = discord.Embed(

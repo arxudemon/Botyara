@@ -10,6 +10,7 @@ env/
 
 # Env / secrets
 .env
+artifacts/
 
 # IDE
 .idea/
@@ -20,3 +21,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# AI
+.claude
+.copilot
+.cursor*
