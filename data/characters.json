@@ -1,0 +1,22 @@
+[
+  {"name": "Ganyu", "rarity": 5, "element": "Крио", "weapon_type": "Лук", "banner": "limited"},
+  {"name": "Hu Tao", "rarity": 5, "element": "Пиро", "weapon_type": "Копье", "banner": "limited"},
+  {"name": "Raiden Shogun", "rarity": 5, "element": "Электро", "weapon_type": "Копье", "banner": "limited"},
+  {"name": "Zhongli", "rarity": 5, "element": "Гео", "weapon_type": "Копье", "banner": "limited"},
+  {"name": "Diluc", "rarity": 5, "element": "Пиро", "weapon_type": "Клэймор", "banner": "standard"},
+  {"name": "Jean", "rarity": 5, "element": "Анемо", "weapon_type": "Меч", "banner": "standard"},
+  {"name": "Qiqi", "rarity": 5, "element": "Крио", "weapon_type": "Меч", "banner": "standard"},
+  {"name": "Keqing", "rarity": 5, "element": "Электро", "weapon_type": "Меч", "banner": "standard"},
+  {"name": "Tighnari", "rarity": 4, "element": "Дендро", "weapon_type": "Лук", "banner": "standard"},
+  {"name": "Xingqiu", "rarity": 4, "element": "Гидро", "weapon_type": "Меч", "banner": "standard"},
+  {"name": "Bennett", "rarity": 4, "element": "Пиро", "weapon_type": "Меч", "banner": "standard"},
+  {"name": "Xiangling", "rarity": 4, "element": "Пиро", "weapon_type": "Копье", "banner": "standard"},
+  {"name": "Fischl", "rarity": 4, "element": "Электро", "weapon_type": "Лук", "banner": "standard"},
+  {"name": "Chongyun", "rarity": 4, "element": "Крио", "weapon_type": "Клэймор", "banner": "standard"},
+  {"name": "Ningguang", "rarity": 4, "element": "Гео", "weapon_type": "Каталист", "banner": "standard"},
+  {"name": "Amber", "rarity": 4, "element": "Пиро", "weapon_type": "Лук", "banner": "standard"},
+  {"name": "Kaeya", "rarity": 4, "element": "Крио", "weapon_type": "Меч", "banner": "standard"},
+  {"name": "Lisa", "rarity": 4, "element": "Электро", "weapon_type": "Каталист", "banner": "standard"},
+  {"name": "Barbara", "rarity": 4, "element": "Гидро", "weapon_type": "Каталист", "banner": "standard"},
+  {"name": "Noelle", "rarity": 4, "element": "Гео", "weapon_type": "Клэймор", "banner": "standard"}
+]

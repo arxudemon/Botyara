@@ -1,0 +1,15 @@
+[
+  {"name": "Primordial Jade Winged-Spear", "rarity": 5, "weapon_type": "Polearm", "banner": "limited"},
+  {"name": "Mistsplitter Reforged", "rarity": 5, "weapon_type": "Sword", "banner": "limited"},
+  {"name": "Aqua Simulacra", "rarity": 5, "weapon_type": "Bow", "banner": "limited"},
+  {"name": "Skyward Blade", "rarity": 5, "weapon_type": "Sword", "banner": "standard"},
+  {"name": "Skyward Harp", "rarity": 5, "weapon_type": "Bow", "banner": "standard"},
+  {"name": "Skyward Atlas", "rarity": 5, "weapon_type": "Catalyst", "banner": "standard"},
+  {"name": "The Widsith", "rarity": 4, "weapon_type": "Catalyst", "banner": "standard"},
+  {"name": "Favonius Sword", "rarity": 4, "weapon_type": "Sword", "banner": "standard"},
+  {"name": "Sacrificial Bow", "rarity": 4, "weapon_type": "Bow", "banner": "standard"},
+  {"name": "Dragon's Bane", "rarity": 4, "weapon_type": "Polearm", "banner": "standard"},
+  {"name": "Rainslasher", "rarity": 3, "weapon_type": "Claymore", "banner": "standard"},
+  {"name": "Cool Steel", "rarity": 3, "weapon_type": "Sword", "banner": "standard"},
+  {"name": "Slingshot", "rarity": 3, "weapon_type": "Bow", "banner": "standard"}
+]
